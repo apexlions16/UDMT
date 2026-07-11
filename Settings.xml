@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Settings Version="0.1.0" Date="25.06.2026 8:55:34 ÖÖ">
+    <Value Name="AudioPlaybackEngine" Type="Int32">1</Value>
+    <Value Name="CreateAESPBackups" Type="Boolean">False</Value>
+    <Value Name="CreateBNKBackups" Type="Boolean">True</Value>
+    <Value Name="CreatePCKBackups" Type="Boolean">False</Value>
+    <Value Name="DiscordRPCText" Type="String">Developing mods</Value>
+    <Value Name="EnableDiscordRPC" Type="Boolean">False</Value>
+    <Value Name="EncodingSelectedCodec" Type="Int32">0</Value>
+    <Value Name="EncodingSelectedVorbisVersion" Type="Int32">4</Value>
+    <Value Name="EncodingUseSeektable" Type="Boolean">True</Value>
+    <Value Name="EncodingVorbisQuality" Type="Double">0.4</Value>
+    <Value Name="Theme" Type="Int32">0</Value>
+    <Value Name="VgmstreamPath" Type="String">G:\vgmstream-win64\vgmstream-cli.exe</Value>
+    <Value Name="WindowAnimationTime" Type="Single">75</Value>
+</Settings>
