@@ -1,0 +1,78 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>UDMT</RootNamespace>
+    <AssemblyName>UDMT</AssemblyName>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Version>0.1.0</Version>
+    <Product>Universal Dubbing Modding Tool</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Reused managed libraries from FusionTools -->
+    <Reference Include="WwiseVorbis">
+      <HintPath>libs\WwiseVorbis.dll</HintPath>
+    </Reference>
+    <Reference Include="EasyCompressor">
+      <HintPath>libs\EasyCompressor.dll</HintPath>
+    </Reference>
+    <Reference Include="EasyCompressor.LZMA">
+      <HintPath>libs\EasyCompressor.LZMA.dll</HintPath>
+    </Reference>
+    <Reference Include="SevenZip">
+      <HintPath>libs\SevenZip.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+      <HintPath>libs\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <!-- NeFS (.nfs) archive engine from NefsEdit, reused directly -->
+    <Reference Include="VictorBush.Ego.NefsLib">
+      <HintPath>libs\VictorBush.Ego.NefsLib.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Abstractions">
+      <HintPath>libs\System.IO.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="TestableIO.System.IO.Abstractions">
+      <HintPath>libs\TestableIO.System.IO.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="TestableIO.System.IO.Abstractions.Wrappers">
+      <HintPath>libs\TestableIO.System.IO.Abstractions.Wrappers.dll</HintPath>
+    </Reference>
+    <Reference Include="Testably.Abstractions.FileSystem.Interface">
+      <HintPath>libs\Testably.Abstractions.FileSystem.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions">
+      <HintPath>libs\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Native libraries loaded by DllImport. vorbis_native is imported as "vorbis_native"
+       (next to the exe); discord-rpc is imported as "Libs/discord-rpc" (a Libs subfolder). -->
+  <Target Name="CopyNativeLibs" AfterTargets="Build">
+    <Copy SourceFiles="libs\vorbis_native.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="libs\discord-rpc.dll" DestinationFolder="$(OutDir)Libs" SkipUnchangedFiles="true" />
+  </Target>
+
+  <ItemGroup>
+    <!-- FNV-hashed name dictionary, loaded by FusionTools.Utils.HashedData -->
+    <EmbeddedResource Include="Assets\hashes.hl" LogicalName="FusionTools.Resources.hashes.hl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Per-Wwise-version HIRC schemas, read from {BaseDir}\Schemas\v*.wschema at runtime -->
+    <Content Include="Assets\Schemas\*.wschema" Link="Schemas\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Theme + fonts packed as WPF resources -->
+    <Resource Include="Resources\Fonts\*.ttf" />
+    <Resource Include="Resources\gear.png" />
+  </ItemGroup>
+
+</Project>
