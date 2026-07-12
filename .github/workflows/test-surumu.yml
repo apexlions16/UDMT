@@ -1,0 +1,88 @@
+name: Windows test sürümünü oluştur ve yayımla
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/UDMT.TestSurumu/**'
+      - 'SÜRÜM_NOTLARI.md'
+      - '.github/workflows/test-surumu.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  SURUM: 0.2.0-beta.1
+  ETIKET: v0.2.0-beta.1
+
+jobs:
+  derle-ve-yayinla:
+    name: Windows x64 paketini derle ve yayımla
+    runs-on: windows-latest
+
+    steps:
+      - name: Kaynak kodu al
+        uses: actions/checkout@v4
+
+      - name: .NET 9 SDK kur
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Projeyi geri yükle
+        run: dotnet restore src/UDMT.TestSurumu/UDMT.TestSurumu.csproj
+
+      - name: Tek dosyalı Windows uygulamasını yayımla
+        run: >-
+          dotnet publish src/UDMT.TestSurumu/UDMT.TestSurumu.csproj
+          -c Release
+          -r win-x64
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:PublishTrimmed=false
+          -p:DebugType=None
+          -p:DebugSymbols=false
+          -o yayin/UDMT
+
+      - name: Yayın çıktısını doğrula
+        shell: pwsh
+        run: |
+          if (-not (Test-Path 'yayin/UDMT/UDMT.exe')) {
+            throw 'UDMT.exe üretilemedi.'
+          }
+          Copy-Item 'SÜRÜM_NOTLARI.md' 'yayin/UDMT/SÜRÜM_NOTLARI.md'
+          @"
+          UDMT v0.2.0-beta.1
+
+          Bu paket oyun seçimi ve oyun bazlı modül yönlendirmesi test sürümüdür.
+          Ayrıntılar için SÜRÜM_NOTLARI.md dosyasını okuyun.
+          "@ | Set-Content -Path 'yayin/UDMT/OKU_BENI.txt' -Encoding UTF8
+
+      - name: ZIP paketini oluştur
+        shell: pwsh
+        run: Compress-Archive -Path 'yayin/UDMT/*' -DestinationPath "UDMT-v${env:SURUM}-win-x64.zip" -Force
+
+      - name: İş akışı çıktısını sakla
+        uses: actions/upload-artifact@v4
+        with:
+          name: UDMT-v${{ env.SURUM }}-win-x64
+          path: UDMT-v${{ env.SURUM }}-win-x64.zip
+          if-no-files-found: error
+
+      - name: GitHub test sürümünü yayımla
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $paket = "UDMT-v${env:SURUM}-win-x64.zip"
+          gh release view $env:ETIKET *> $null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload $env:ETIKET $paket --clobber
+            gh release edit $env:ETIKET --title "UDMT v${env:SURUM}" --notes-file 'SÜRÜM_NOTLARI.md' --prerelease
+          }
+          else {
+            gh release create $env:ETIKET $paket --target $env:GITHUB_SHA --title "UDMT v${env:SURUM}" --notes-file 'SÜRÜM_NOTLARI.md' --prerelease
+          }
