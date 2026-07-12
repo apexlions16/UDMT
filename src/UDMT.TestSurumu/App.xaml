@@ -10,15 +10,19 @@
     <SolidColorBrush x:Key="Metin" Color="#F4F6FA" />
     <SolidColorBrush x:Key="IkincilMetin" Color="#A7ADBA" />
     <SolidColorBrush x:Key="Vurgu" Color="#7C8CFF" />
+    <SolidColorBrush x:Key="UyariArkaPlan" Color="#27231B" />
+    <SolidColorBrush x:Key="UyariCizgi" Color="#6C592E" />
+    <SolidColorBrush x:Key="UyariBaslik" Color="#FFD77A" />
+    <SolidColorBrush x:Key="UyariMetin" Color="#E6D5AA" />
 
     <Style TargetType="Window">
-      <Setter Property="Background" Value="{StaticResource ArkaPlan}" />
-      <Setter Property="Foreground" Value="{StaticResource Metin}" />
+      <Setter Property="Background" Value="{DynamicResource ArkaPlan}" />
+      <Setter Property="Foreground" Value="{DynamicResource Metin}" />
       <Setter Property="FontFamily" Value="Segoe UI" />
     </Style>
 
     <Style TargetType="Button" x:Key="AnaDugme">
-      <Setter Property="Background" Value="{StaticResource Vurgu}" />
+      <Setter Property="Background" Value="{DynamicResource Vurgu}" />
       <Setter Property="Foreground" Value="White" />
       <Setter Property="BorderThickness" Value="0" />
       <Setter Property="Padding" Value="20,10" />
@@ -27,9 +31,9 @@
     </Style>
 
     <Style TargetType="Button" x:Key="IkincilDugme">
-      <Setter Property="Background" Value="{StaticResource PanelVurgu}" />
-      <Setter Property="Foreground" Value="{StaticResource Metin}" />
-      <Setter Property="BorderBrush" Value="{StaticResource Cizgi}" />
+      <Setter Property="Background" Value="{DynamicResource PanelVurgu}" />
+      <Setter Property="Foreground" Value="{DynamicResource Metin}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource Cizgi}" />
       <Setter Property="BorderThickness" Value="1" />
       <Setter Property="Padding" Value="16,9" />
       <Setter Property="Cursor" Value="Hand" />
