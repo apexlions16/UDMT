@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>UDMT</AssemblyName>
+    <RootNamespace>UDMT</RootNamespace>
+    <Version>0.2.0-beta.1</Version>
+    <Product>Universal Dubbing Modding Tool</Product>
+    <Description>UDMT oyun seçimi ve oyun bazlı modül yönlendirmesi test sürümü.</Description>
+  </PropertyGroup>
+</Project>
