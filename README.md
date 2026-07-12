@@ -30,13 +30,15 @@ UDMT bu zinciri tek uygulamada birleştirmeyi hedefler:
 flowchart LR
     A[Yeni dublaj kaydı] --> B[FFmpeg ile çözme ve normalleştirme]
     B --> C[WEM kodlama / özgün formata eşleme]
-    C --> D{Hedef dosya veya arşiv}
-    D --> E[WEM / BNK / PCK / AESP]
-    D --> F[Outlast APK]
+    C --> D{Seçilen oyun profili}
+    D --> E[Outlast / Whistleblower BNK]
+    D --> F[DMC: Devil May Cry APK]
     D --> G[Codemasters NeFS]
+    D --> I[Genel Wwise araçları]
     E --> H[Kaydet ve oyunda test et]
     F --> H
     G --> H
+    I --> H
 ```
 
 Bu nedenle UDMT, yalnızca bir “ses dönüştürücü” değil; **dublaj sesini hazırlama, inceleme, eşleştirme, arşive yerleştirme ve yeniden paketleme aracı**dır.
@@ -48,18 +50,19 @@ Bu nedenle UDMT, yalnızca bir “ses dönüştürücü” değil; **dublaj sesi
 Dosya biçimi ve Wwise sürümü uyumlu olduğu sürece farklı oyunlardan alınan aşağıdaki dosyalar üzerinde çalışmayı hedefler:
 
 - `.wem` — Wwise ses dosyası
-- `.bnk` — Wwise ses bankası
 - `.pck` — Wwise paket dosyası
 - `.aesp` — Audio Event System Package
 
-### 2. Outlast ve Whistleblower
+> [!NOTE]
+> Mevcut BNK çalışma akışı genel amaçlı bir “her oyunun BNK dosyasını düzenleme” özelliği olarak değerlendirilmemelidir. Şu anki BNK özelliği özellikle **Outlast** ve **Outlast: Whistleblower** için hazırlanmıştır. Diğer oyunlara ait BNK dosyalarının desteği ayrıca doğrulanmalıdır.
 
-Uygulamada bu oyunlar için özel bir modül vardır. Buradaki `.apk`, Android uygulama paketi değildir; BNK ses bankalarını taşıyan oyuna özel bir arşivdir.
+### 2. Outlast ve Outlast: Whistleblower — BNK/WEM
 
-Outlast modülü:
+Outlast ve genişleme paketi **Whistleblower**, uygulamada aynı temel BNK/WEM altyapısını kullanan iki ayrı oyun profili olarak ele alınmalıdır. Kullanıcı başlangıçta oyununu seçtiğinde uygulama o oyuna ait yolları, arşivleri, altyazı kaynaklarını ve varsayılan işlem ayarlarını yüklemelidir.
 
-- `.apk` arşivini açabilir ve yeniden paketleyebilir,
-- içindeki BNK bankalarını ve WEM seslerini listeleyebilir,
+Outlast/Whistleblower BNK modülü:
+
+- BNK ses bankalarını ve içlerindeki WEM seslerini listeleyebilir,
 - tek bir WEM’i veya tüm bankayı dışarı çıkarabilir,
 - yeni sesi özgün WEM biçimine otomatik eşleyebilir,
 - özgün CUE/etiket bilgisini yeni sese aktarabilir,
@@ -67,7 +70,20 @@ Outlast modülü:
 - ham veriyi hex düzenleyicide açabilir,
 - Unreal tarzı `.int` yerelleştirme dosyalarını yükleyip altyazı metni ve anahtarı üzerinden arayabilir.
 
-### 3. Codemasters / EGO NeFS arşivleri
+### 3. DMC: Devil May Cry — APK arşivi
+
+Uygulamadaki `.apk` arşiv desteği **DMC: Devil May Cry** için hazırlanmıştır. Buradaki `.apk`, Android uygulama paketi değildir; oyunun kullandığı özel bir arşiv biçimidir.
+
+DMC APK modülü:
+
+- oyuna ait `.apk` arşivlerini açmayı ve yeniden paketlemeyi,
+- arşiv içindeki ses içeriklerini listelemeyi ve dışarı çıkarmayı,
+- değiştirilmiş dublaj dosyalarını doğru arşiv girdilerine yerleştirmeyi,
+- kaydetme öncesinde oyun profiline özgü doğrulamalar uygulamayı
+
+hedefler. DMC profili seçildiğinde Outlast/Whistleblower’a özel BNK ve `.int` altyazı araçları varsayılan olarak gösterilmemelidir.
+
+### 4. Codemasters / EGO NeFS arşivleri
 
 NeFS modülü, `.nfs` arşivlerini açmak ve değiştirmek için `NefsLib` tabanlıdır. Kaynak kodda F1 konuşma arşivleri örnek kullanım alanı olarak belirtilmiştir; ancak destek oyun adına değil, arşiv sürümünün ve içeriğin kütüphaneyle uyumuna bağlıdır.
 
@@ -87,10 +103,11 @@ NeFS modülü:
 
 | Modül | Amaç | Başlıca işlevler |
 |---|---|---|
-| **Wwise Editör** | Genel Wwise dosyalarını incelemek ve değiştirmek | BNK/PCK/AESP açma-kaydetme, WEM önizleme, içe/dışa aktarma, HIRC inceleme ve düzenleme, XML aktarımı |
+| **Genel Wwise Editör** | Uyumlu Wwise dosyalarını incelemek ve değiştirmek | WEM/PCK/AESP işlemleri, önizleme, içe/dışa aktarma, HIRC inceleme ve XML aktarımı |
+| **Outlast / Whistleblower BNK** | Outlast ve Whistleblower ses bankalarını düzenlemek | BNK/WEM gezintisi, değiştirme, `.int` altyazı arama ve CUE koruma |
+| **DMC APK Arşiv** | DMC: Devil May Cry arşivlerini düzenlemek | APK açma, içerik çıkarma/değiştirme, oyun profiline göre doğrulama ve yeniden paketleme |
 | **Ses → WEM** | Dublaj kayıtlarını WEM’e çevirmek | Tekli/toplu dönüşüm, Vorbis veya PCM, sürüm/kalite/örnekleme hızı/mono seçimi |
 | **NeFS Arşiv** | Codemasters/EGO arşivlerini düzenlemek | Çıkarma, tekli ve toplu değiştirme, otomatik biçim eşleme, yeniden paketleme |
-| **APK Arşiv (Outlast)** | Outlast ses arşivlerini düzenlemek | BNK/WEM gezintisi, değiştirme, altyazı arama, CUE koruma, yeniden paketleme |
 
 ## Wwise Editör özellikleri
 
@@ -176,9 +193,9 @@ Bu özellik, farklı kayıt araçlarından gelen dublaj dosyalarını oyuna uygu
 
 WEM dosyaları yalnızca ses verisi içermeyebilir. CUE noktaları ile `adtl/labl` etiketleri, bazı oyunlarda zamanlama veya altyazıyla ilişkili bilgi taşıyabilir.
 
-UDMT, WEM değiştirirken özgün dosyadaki bu verileri yeni WEM’e aktarabilen ortak bir `WemCue` katmanı kullanır. Bu işlem Wwise, Outlast APK ve NeFS iş akışlarında aynı mantıkla kullanılmak üzere tasarlanmıştır.
+UDMT, WEM değiştirirken özgün dosyadaki bu verileri yeni WEM’e aktarabilen ortak bir `WemCue` katmanı kullanır. Bu işlem genel Wwise, Outlast/Whistleblower BNK, DMC APK ve NeFS iş akışlarında ortak bir ses işleme çekirdeği üzerinden kullanılmak üzere tasarlanmıştır.
 
-Outlast tarafında ayrıca `.int` dosyaları okunabilir. Bu dosyalar:
+Outlast ve Whistleblower profillerinde ayrıca `.int` dosyaları okunabilir. Bu dosyalar:
 
 ```ini
 [BölümAdı]
@@ -190,34 +207,40 @@ biçimindeki girdilerden aranabilir bir altyazı veritabanı oluşturur. Kodda W
 ## Örnek çalışma akışı
 
 1. Oyunun özgün ses arşivini yedekleyin.
-2. Hedef oyuna göre Wwise, Outlast APK veya NeFS modülünü açın.
-3. Değiştirilecek konuşmayı WEM kimliği, dosya adı, olay adı veya altyazı metniyle bulun.
-4. Yeni dublaj kaydını WAV, MP3, FLAC veya desteklenen başka bir biçimde hazırlayın.
-5. Otomatik biçim eşlemeyi açık tutarak yeni kaydı seçin.
-6. Gerekiyorsa CUE bilgisi kopyalamayı etkinleştirin.
-7. Ses seviyesini kontrol edin; gerekiyorsa dB ayarı uygulayın.
-8. Değişiklikleri farklı bir dosyaya kaydedin.
-9. Oyunda süre, ses seviyesi, dudak senkronu, altyazı zamanlaması ve kararlılık testi yapın.
-10. Sonuç doğrulandıktan sonra mod paketini oluşturun.
+2. Açılış ekranında hedef oyunu seçin: Outlast, Outlast: Whistleblower, DMC: Devil May Cry veya desteklenen başka bir oyun profili.
+3. Uygulamanın seçilen profile göre açtığı BNK, APK, NeFS veya genel Wwise araçlarından uygun olanı kullanın.
+4. Değiştirilecek konuşmayı WEM kimliği, dosya adı, olay adı veya destekleniyorsa altyazı metniyle bulun.
+5. Yeni dublaj kaydını WAV, MP3, FLAC veya desteklenen başka bir biçimde hazırlayın.
+6. Otomatik biçim eşlemeyi açık tutarak yeni kaydı seçin.
+7. Gerekiyorsa CUE bilgisi kopyalamayı etkinleştirin.
+8. Ses seviyesini kontrol edin; gerekiyorsa dB ayarı uygulayın.
+9. Değişiklikleri farklı bir dosyaya kaydedin.
+10. Oyunda süre, ses seviyesi, dudak senkronu, altyazı zamanlaması ve kararlılık testi yapın.
+11. Sonuç doğrulandıktan sonra mod paketini oluşturun.
 
 ## Teknik mimari
 
 ```mermaid
 flowchart TD
-    S[ShellWindow] --> R[ModuleRegistry]
-    R --> W[Wwise modülleri]
-    R --> N[NeFS modülü]
-    R --> A[Outlast APK modülü]
+    S[Oyun seçim ekranı] --> P[GameProfileRegistry]
+    P --> O[Outlast profili]
+    P --> WB[Whistleblower profili]
+    P --> D[DMC: Devil May Cry profili]
+    P --> C[Codemasters profilleri]
 
-    W --> AC[Ses dönüştürme çekirdeği]
-    N --> AC
+    O --> B[Outlast/Whistleblower BNK modülü]
+    WB --> B
+    D --> A[DMC APK modülü]
+    C --> N[NeFS modülü]
+
+    B --> AC[Ortak ses dönüştürme çekirdeği]
     A --> AC
-
+    N --> AC
     AC --> FF[FFmpeg]
-    W --> VG[vgmstream - isteğe bağlı]
+    AC --> VG[vgmstream - isteğe bağlı]
+    B --> FT[Wwise/BNK bileşenleri]
+    A --> AA[APK arşiv bileşenleri]
     N --> NL[NefsLib]
-    A --> BA[ApkArchive + BNK ayrıştırıcı]
-    W --> FT[Port edilen FusionTools bileşenleri]
 ```
 
 ### Dizin yapısı
@@ -242,9 +265,25 @@ src/UDMT/
 └── libs/                    # Yerel yönetilen ve native bağımlılıklar
 ```
 
-### Modül sistemi
+### Oyun profili ve modül sistemi
 
-Her araç `IToolModule` arabirimini uygular ve `ModuleRegistry` üzerinden ana pencereye kaydedilir. Bu yapı yeni bir oyun veya arşiv türü eklemek için ayrı bir modül geliştirilmesine izin verir.
+Hedef kullanıcı deneyimi, önce araç seçmek yerine önce **oyun seçmek** üzerine kurulmalıdır. Açılışta veya yeni proje oluştururken kullanıcı desteklenen oyunlardan birini seçer; uygulama da yalnızca o oyuna uygun araçları, varsayılanları ve doğrulamaları etkinleştirir.
+
+Örnek davranış:
+
+| Seçilen oyun | Etkinleşen temel çalışma alanı | Oyuna özgü içerik |
+|---|---|---|
+| **Outlast** | BNK/WEM editörü | Outlast arşiv yolları, `.int` altyazıları ve uygun Wwise varsayılanları |
+| **Outlast: Whistleblower** | BNK/WEM editörü | Whistleblower’a ait ayrı yollar, altyazılar ve profil ayarları |
+| **DMC: Devil May Cry** | APK arşiv editörü | DMC APK yapısı, arşiv doğrulaması ve paketleme kuralları |
+| **Codemasters/EGO oyunu** | NeFS editörü | Seçilen oyunun NeFS sürümü ve arşiv yolları |
+
+Bu yapı iki katmandan oluşmalıdır:
+
+1. `IGameProfile`: oyunun kimliğini, görünen adını, desteklediği arşiv türlerini, varsayılan klasörlerini, Wwise özelliklerini ve doğrulama kurallarını tanımlar.
+2. `IToolModule`: profil tarafından kullanılabilen BNK, APK, NeFS, WEM dönüştürme veya diğer çalışma ekranını sağlar.
+
+Mevcut `ModuleRegistry`, oyun profilini hesaba katacak şekilde genişletilmelidir. Böylece yeni bir oyun desteği eklemek, tüm uygulamayı değiştirmek yerine yeni bir profil ve gerekiyorsa yeni bir modül eklemekle mümkün olur.
 
 Bir modül şu bilgileri sağlar:
 
@@ -252,8 +291,19 @@ Bir modül şu bilgileri sağlar:
 - görünen Türkçe ad,
 - simge,
 - kategori,
+- desteklediği oyun profilleri,
 - sıralama değeri,
 - oluşturulacak WPF görünümü.
+
+Bir oyun profili ise en az şu bilgileri sağlamalıdır:
+
+- benzersiz oyun kimliği ve görünen ad,
+- ana oyun ile genişleme paketi ayrımı,
+- desteklenen arşiv ve ses biçimleri,
+- varsayılan oyun/yerelleştirme klasörleri,
+- gerekli Wwise sürümü ve codec varsayımları,
+- etkinleştirilecek modüller,
+- kayıt öncesi doğrulama ve yedekleme kuralları.
 
 ## Gereksinimler
 
@@ -327,7 +377,8 @@ Kaynak arşivde aşağıdaki bileşenler veya bunlardan taşınmış kodlar bulu
 - `_research`, `bin` ve `obj` klasörleri kaynak arşive karışmıştır.
 - Üçüncü taraf lisansları ve kaynak kökenleri belgelenmemiştir.
 - Her Wwise ve NeFS sürümü için gerçek oyun dosyalarıyla uyumluluk matrisi yoktur.
-- Outlast altyazı veritabanı seçili WEM/HIRC olayıyla otomatik ilişkilendirilmiyor.
+- Outlast, Whistleblower ve DMC için oyun profili seçimi henüz ana uygulama akışına bağlanmamıştır.
+- Outlast/Whistleblower altyazı veritabanı seçili WEM/HIRC olayıyla otomatik ilişkilendirilmiyor.
 - Toplu içe aktarmada dönüşüm başarısızlığı daha güvenli şekilde durdurulmalıdır.
 - Ayarlar XAML’inde AESP yedeği seçeneğinin `CreatePCKBackups` anahtarına bağlandığı görülmektedir; bu hata düzeltilmelidir.
 - Temp dosyalarının uygulama kapanışında ve hata durumlarında merkezi olarak temizlenmesi güçlendirilmelidir.
@@ -343,14 +394,23 @@ Kaynak arşivde aşağıdaki bileşenler veya bunlardan taşınmış kodlar bulu
 4. Temiz bir Windows makinesinde Release derlemesini doğrulamak.
 5. Üçüncü taraf lisans ve kaynak kökeni denetimini tamamlamak.
 
-### Aşama 2 — Türkçeleştirme ve ürünleştirme
+### Aşama 2 — Oyun profili mimarisi
+
+1. Açılışa oyun seçme veya yeni oyun projesi oluşturma ekranı eklemek.
+2. `IGameProfile` altyapısını oluşturmak.
+3. Outlast ve Outlast: Whistleblower’ı ayrı profiller olarak BNK modülüne bağlamak.
+4. DMC: Devil May Cry profilini APK modülüne bağlamak.
+5. Seçilen oyuna göre görünür modülleri, varsayılan klasörleri, Wwise ayarlarını ve kayıt doğrulamalarını değiştirmek.
+6. Son kullanılan oyun profilini ve oyun başına ayarları saklamak.
+
+### Aşama 3 — Türkçeleştirme ve ürünleştirme
 
 1. Tüm İngilizce arayüz metinlerini Türkçeleştirmek.
 2. Metinleri `ResourceDictionary` veya `.resx` tabanlı merkezi kaynaklara taşımak.
 3. Hata iletilerini kullanıcı odaklı hâle getirmek ve teknik ayrıntıyı log dosyasına ayırmak.
 4. İlk çalıştırma ve FFmpeg/vgmstream kurulum yönlendirmesi eklemek.
 
-### Aşama 3 — Veri güvenliği ve doğrulama
+### Aşama 4 — Veri güvenliği ve doğrulama
 
 1. Her kayıttan önce doğrulanmış, zaman damgalı yedek oluşturmak.
 2. İçe aktarılan WEM’in codec/sürüm/örnekleme hızı/kanal özelliklerini zorunlu doğrulamak.
@@ -358,13 +418,13 @@ Kaynak arşivde aşağıdaki bileşenler veya bunlardan taşınmış kodlar bulu
 4. Kaydedilen arşivi yeniden açıp yapısal bütünlük kontrolü yapmak.
 5. Geri alma ve değişiklik özeti eklemek.
 
-### Aşama 4 — Test ve oyun profilleri
+### Aşama 5 — Test ve oyun uyumluluğu
 
 1. WEM encode/decode ve CUE aktarımı için birim testleri yazmak.
-2. APK ve NeFS yeniden paketleme için karşılaştırmalı testler eklemek.
-3. Desteklenen oyun/sürüm/örnek arşiv matrisi oluşturmak.
-4. Outlast için WEM/HIRC olayı ↔ `.int` altyazı anahtarı eşlemesini arayüze bağlamak.
-5. Oyun başına yol, arşiv ve kodlama ayarlarını saklayan profiller eklemek.
+2. DMC APK ve Codemasters NeFS yeniden paketleme için karşılaştırmalı testler eklemek.
+3. Outlast ve Whistleblower BNK iş akışları için gerçek örnek dosya testleri eklemek.
+4. Desteklenen oyun/sürüm/örnek arşiv matrisi oluşturmak.
+5. Outlast/Whistleblower için WEM/HIRC olayı ↔ `.int` altyazı anahtarı eşlemesini arayüze bağlamak.
 
 ## Ne değildir?
 
@@ -389,7 +449,7 @@ Oyun arşivlerini değiştirmek veri kaybına veya oyunun açılmamasına neden 
 
 ## Hukuki not
 
-UDMT bağımsız bir topluluk projesidir. Audiokinetic, Red Barrels, Codemasters, Electronic Arts veya adı geçen diğer hak sahipleriyle bağlantılı ya da onlar tarafından onaylanmış değildir. Kullanıcılar sahip oldukları oyun kopyaları, oyunların son kullanıcı lisansları ve yürürlükteki mevzuat çerçevesinde hareket etmekten sorumludur.
+UDMT bağımsız bir topluluk projesidir. Audiokinetic, Red Barrels, Capcom, Ninja Theory, Codemasters, Electronic Arts veya adı geçen diğer hak sahipleriyle bağlantılı ya da onlar tarafından onaylanmış değildir. Kullanıcılar sahip oldukları oyun kopyaları, oyunların son kullanıcı lisansları ve yürürlükteki mevzuat çerçevesinde hareket etmekten sorumludur.
 
 ## Belgelendirme dili
 
