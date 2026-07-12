@@ -7,8 +7,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>UDMT</AssemblyName>
     <RootNamespace>UDMT</RootNamespace>
-    <Version>0.2.0-beta.1</Version>
-    <Product>Universal Dubbing Modding Tool</Product>
-    <Description>UDMT oyun seçimi ve oyun bazlı modül yönlendirmesi test sürümü.</Description>
+    <Version>0.3.0-beta.1</Version>
+    <Product>UDMT Format Laboratuvarı</Product>
+    <Description>Dosya formatlarını tanıma, açma ve geri paketleme yolunu gösteren format merkezli test sürümü.</Description>
   </PropertyGroup>
 </Project>
