@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Windows;
 using UDMT.Models;
+using UDMT.Services;
 
 namespace UDMT;
 
@@ -10,6 +11,7 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+        ThemeManager.KayitliTemayiUygula();
 
         DispatcherUnhandledException += (_, args) =>
         {
@@ -22,19 +24,19 @@ public partial class App : Application
             args.Handled = true;
         };
 
-        var secim = new GameSelectionWindow();
-        if (secim.ShowDialog() != true || secim.SelectedProfile is null)
+        var secim = new FormatSelectionWindow();
+        if (secim.ShowDialog() != true || secim.SelectedFormat is null)
         {
             Shutdown();
             return;
         }
 
-        AnaPencereyiAc(secim.SelectedProfile);
+        AnaPencereyiAc(secim.SelectedFormat);
     }
 
-    public static void AnaPencereyiAc(GameProfile profile, Window? eskiPencere = null)
+    public static void AnaPencereyiAc(FileFormatProfile format, Window? eskiPencere = null)
     {
-        var pencere = new MainWindow(profile);
+        var pencere = new MainWindow(format);
         Current.MainWindow = pencere;
         Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
         pencere.Show();
