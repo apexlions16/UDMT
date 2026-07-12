@@ -1,0 +1,104 @@
+<Window x:Class="UDMT.FormatSelectionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="UDMT — Dosya Formatı Seçimi"
+        Width="900" Height="690" MinWidth="760" MinHeight="580"
+        WindowStartupLocation="CenterScreen">
+  <Grid Margin="32">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <Grid Grid.Row="0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+      <Border Grid.Column="0" Width="46" Height="46" CornerRadius="12" Background="{DynamicResource Vurgu}">
+        <TextBlock Text="U" FontSize="25" FontWeight="Bold" Foreground="White"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+      </Border>
+      <StackPanel Grid.Column="1" Margin="14,0,0,0" VerticalAlignment="Center">
+        <TextBlock Text="UDMT Format Laboratuvarı" FontSize="19" FontWeight="SemiBold" />
+        <TextBlock Text="v0.3.0-beta.1 · Format merkezli geliştirme sürümü"
+                   Foreground="{DynamicResource IkincilMetin}" FontSize="12" />
+      </StackPanel>
+      <Button x:Name="TemaDugmesi" Grid.Column="2" Style="{DynamicResource IkincilDugme}"
+              VerticalAlignment="Center" Click="TemaDugmesi_Click" />
+    </Grid>
+
+    <StackPanel Grid.Row="1" Margin="0,30,0,18">
+      <TextBlock Text="İncelemek istediğiniz dosya formatını seçin" FontSize="27" FontWeight="SemiBold" />
+      <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource IkincilMetin}" TextWrapping="Wrap"
+                 Text="Yeni geliştirme yönünde önce formatın nasıl tanındığını, nasıl açıldığını, içeriğin nasıl değiştirildiğini ve güvenli biçimde nasıl geri paketlendiğini belgeliyoruz." />
+    </StackPanel>
+
+    <ListBox x:Name="FormatListesi" Grid.Row="2" ItemsSource="{Binding}"
+             Background="Transparent" BorderThickness="0"
+             HorizontalContentAlignment="Stretch" SelectionMode="Single"
+             MouseDoubleClick="FormatListesi_CiftTik">
+      <ListBox.ItemContainerStyle>
+        <Style TargetType="ListBoxItem">
+          <Setter Property="Padding" Value="0" />
+          <Setter Property="Margin" Value="0,0,0,10" />
+          <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+          <Setter Property="Background" Value="Transparent" />
+          <Setter Property="BorderThickness" Value="0" />
+          <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+          <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+              <Setter Property="Background" Value="{DynamicResource PanelVurgu}" />
+            </Trigger>
+          </Style.Triggers>
+        </Style>
+      </ListBox.ItemContainerStyle>
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <Border Padding="16" CornerRadius="9"
+                  Background="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=Background}"
+                  BorderBrush="{DynamicResource Cizgi}" BorderThickness="1">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="92" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+              </Grid.ColumnDefinitions>
+              <Border Grid.Column="0" Width="76" Height="48" CornerRadius="8" Background="{DynamicResource Panel}">
+                <TextBlock Text="{Binding ShortName}" FontWeight="Bold" FontSize="13"
+                           Foreground="{DynamicResource Vurgu}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" />
+              </Border>
+              <StackPanel Grid.Column="1" Margin="12,0,18,0" VerticalAlignment="Center">
+                <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="SemiBold" />
+                <TextBlock Text="{Binding Description}" Margin="0,4,0,0" FontSize="12"
+                           Foreground="{DynamicResource IkincilMetin}" TextWrapping="Wrap" />
+              </StackPanel>
+              <Border Grid.Column="2" Padding="10,5" CornerRadius="12" Background="{DynamicResource Panel}">
+                <TextBlock Text="{Binding Extensions}" FontSize="11" FontWeight="SemiBold"
+                           Foreground="{DynamicResource IkincilMetin}" />
+              </Border>
+            </Grid>
+          </Border>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+
+    <Grid Grid.Row="3" Margin="0,18,0,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+      <TextBlock Grid.Column="0" Text="Bu sürüm format bilgisini ve geliştirme sırasını gösterir."
+                 Foreground="{DynamicResource IkincilMetin}" FontSize="11" VerticalAlignment="Center" />
+      <Button Grid.Column="1" Content="Çıkış" Style="{DynamicResource IkincilDugme}"
+              Margin="0,0,10,0" Click="Cikis_Click" IsCancel="True" />
+      <Button Grid.Column="2" Content="Formatı İncele" Style="{DynamicResource AnaDugme}"
+              Click="Devam_Click" IsDefault="True" />
+    </Grid>
+  </Grid>
+</Window>
