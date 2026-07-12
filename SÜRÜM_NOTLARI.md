@@ -1,41 +1,49 @@
-# UDMT v0.2.0-beta.1 — Oyun seçimi test sürümü
+# UDMT v0.3.0-beta.1 — Format Laboratuvarı ve Koyu Mod
 
-Bu sürüm, UDMT'nin oyun odaklı çalışma düzenini kullanıcıların deneyebilmesi için hazırlanmış ilk indirilebilir Windows test paketidir.
+Bu sürüm, projenin geliştirme yönünü oyun merkezli yaklaşımdan dosya formatı merkezli yaklaşıma geçirir.
 
-## Bu sürümde test edilebilenler
+## Yeni geliştirme yaklaşımı
 
-- Uygulama açılır açılmaz oyun seçim ekranının gösterilmesi.
-- **Outlast** ve **Outlast: Whistleblower** profillerinin ayrı seçilebilmesi.
-- Outlast profillerinde **BNK / WEM** çalışma alanının gösterilmesi.
-- **DMC: Devil May Cry** profilinde **APK** çalışma alanının gösterilmesi.
-- **F1 25** profilinde **NeFS** çalışma alanının gösterilmesi.
-- Ana ekranın seçilen oyuna göre değişmesi.
-- Uygulama kapatılmadan “Oyunu Değiştir” seçeneğiyle başka profile geçilebilmesi.
-- Uygulama ve sürüm metinlerinin Türkçe olması.
+- Açılışta oyun yerine dosya formatı seçilir.
+- WEM, BNK, DMC APK, NeFS, PCK ve AESP için ayrı format kartları eklenmiştir.
+- Her format için nasıl tanındığı, hangi oyunlarda görüldüğü, nasıl açılacağı, içeriğin nasıl değiştirileceği ve nasıl geri paketleneceği gösterilir.
+- Oyun profilleri, format çekirdekleri kararlı olduktan sonra eklenecek yapılandırma katmanı olarak yeniden konumlandırılmıştır.
+- Ayrıntılı geliştirme planı `YOL_HARITASI.md` dosyasına eklenmiştir.
 
-## Bu sürümün sınırı
+## Tema sistemi
 
-Bu paket bir **arayüz ve oyun yönlendirmesi beta sürümüdür**. Arşiv okuma, WEM dönüştürme, BNK/APK/NeFS dosyası değiştirme ve yeniden paketleme çekirdeği henüz bu indirilebilir pakete bağlanmamıştır. Ekranlarda bu durum açıkça gösterilir.
+- Koyu mod varsayılan tema hâline getirilmiştir.
+- Açık ve koyu mod arasında geçiş düğmesi eklenmiştir.
+- Seçilen tema `%LocalAppData%\UDMT\tema.txt` dosyasında saklanır ve sonraki açılışta geri yüklenir.
+- Pencere, panel, metin, çizgi, vurgu ve uyarı renkleri dinamik tema kaynaklarına taşınmıştır.
 
-Eksik kaynak ve ikili bağımlılıklar güvenli biçimde depoya aktarıldıktan sonra mevcut arşiv düzenleme çekirdeği bu oyun profillerine bağlanacaktır.
+## Bu pakette test edilebilenler
+
+- Format seçim ekranı.
+- Formatlar arasında geçiş.
+- Format tanıma ve açma/geri paketleme adımlarının görüntülenmesi.
+- Açık/koyu tema geçişi.
+- Tema seçiminin uygulama yeniden açıldığında korunması.
+
+## Henüz bulunmayanlar
+
+Bu beta sürümü gerçek dosya açma veya yeniden paketleme çekirdeğini içermemektedir. WEM, BNK, APK, NeFS, PCK ve AESP işleyicileri yol haritasındaki sırayla uygulamaya bağlanacaktır.
 
 ## Kurulum
 
-1. `UDMT-v0.2.0-beta.1-win-x64.zip` dosyasını indirin.
+1. `UDMT-v0.3.0-beta.1-win-x64.zip` dosyasını indirin.
 2. ZIP dosyasını boş bir klasöre tamamen çıkarın.
 3. `UDMT.exe` dosyasını çalıştırın.
-4. Açılış ekranından oyununuzu seçin.
+4. Açılış ekranından incelemek istediğiniz dosya formatını seçin.
 
-Paket Windows x64 içindir ve **.NET 9 Desktop Runtime** gerektirir.
+Paket Windows x64 içindir ve self-contained olarak yayımlanır.
+
+## Bilinen sınırlar
+
+- Ana kaynak arşivinin ve üçüncü taraf bağımlılıkların eksiksiz aktarımı tamamlanmamıştır.
+- Format açıklamaları mevcut araştırma ve kod yapısına dayanır; gerçek örnek dosyalarla uyumluluk testleri gereklidir.
+- PCK ve AESP desteği araştırma aşamasındadır.
 
 ## Geri bildirim
 
-Bir sorun bildirirken şunları yazın:
-
-- seçtiğiniz oyun,
-- beklediğiniz davranış,
-- gerçekleşen davranış,
-- varsa ekran görüntüsü,
-- uygulama klasöründe oluştuysa `udmt_error.log` içeriği.
-
-Issue, pull request ve inceleme açıklamalarının tamamı Türkçe hazırlanmalıdır.
+Bir sorun bildirirken seçilen formatı, beklenen davranışı, gerçekleşen davranışı, tema seçimini ve varsa `udmt_error.log` içeriğini ekleyin.

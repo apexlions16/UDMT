@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - 'src/UDMT.TestSurumu/**'
+      - 'README.md'
+      - 'YOL_HARITASI.md'
       - 'SÜRÜM_NOTLARI.md'
       - '.github/workflows/test-surumu.yml'
   pull_request:
@@ -13,6 +15,8 @@ on:
       - main
     paths:
       - 'src/UDMT.TestSurumu/**'
+      - 'README.md'
+      - 'YOL_HARITASI.md'
       - 'SÜRÜM_NOTLARI.md'
       - '.github/workflows/test-surumu.yml'
   workflow_dispatch:
@@ -22,8 +26,8 @@ permissions:
   issues: write
 
 env:
-  SURUM: 0.2.0-beta.1
-  ETIKET: v0.2.0-beta.1
+  SURUM: 0.3.0-beta.1
+  ETIKET: v0.3.0-beta.1
 
 jobs:
   derle-ve-yayinla:
@@ -62,11 +66,12 @@ jobs:
             throw 'UDMT.exe üretilemedi.'
           }
           Copy-Item 'SÜRÜM_NOTLARI.md' 'yayin/UDMT/SÜRÜM_NOTLARI.md'
+          Copy-Item 'YOL_HARITASI.md' 'yayin/UDMT/YOL_HARITASI.md'
           @"
-          UDMT v0.2.0-beta.1
+          UDMT v0.3.0-beta.1
 
-          Bu paket oyun seçimi ve oyun bazlı modül yönlendirmesi test sürümüdür.
-          Ayrıntılar için SÜRÜM_NOTLARI.md dosyasını okuyun.
+          Bu paket format merkezli geliştirme yönü ve tema sistemi test sürümüdür.
+          Ayrıntılar için SÜRÜM_NOTLARI.md ve YOL_HARITASI.md dosyalarını okuyun.
           "@ | Set-Content -Path 'yayin/UDMT/OKU_BENI.txt' -Encoding UTF8
 
       - name: ZIP paketini oluştur
@@ -102,4 +107,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh issue comment 1 --body "✅ **UDMT v${env:SURUM} test sürümü yayımlandı.** Windows x64, self-contained ZIP paketi derlendi, doğrulandı ve GitHub Release'e yüklendi. Kaynak commit: ``${env:GITHUB_SHA}``."
+          gh issue comment 1 --body "✅ **UDMT v${env:SURUM} test sürümü yayımlandı.** Format seçim ekranı ve açık/koyu tema sistemi Windows x64 paketi olarak derlendi ve doğrulandı. Kaynak commit: ``${env:GITHUB_SHA}``."

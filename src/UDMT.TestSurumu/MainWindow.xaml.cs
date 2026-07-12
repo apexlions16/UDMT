@@ -1,31 +1,43 @@
 using System.Windows;
 using UDMT.Models;
+using UDMT.Services;
 
 namespace UDMT;
 
 public partial class MainWindow : Window
 {
-    private readonly GameProfile _profile;
+    private readonly FileFormatProfile _format;
 
-    public MainWindow(GameProfile profile)
+    public MainWindow(FileFormatProfile format)
     {
-        _profile = profile;
+        _format = format;
         InitializeComponent();
 
-        Title = $"UDMT — {profile.Name}";
-        SeciliOyunBaslik.Text = $"Seçili oyun: {profile.Name}";
-        OyunAdi.Text = profile.Name;
-        OyunAciklamasi.Text = profile.Description;
-        ArsivTuru.Text = profile.ArchiveType;
-        AracListesi.ItemsSource = profile.Tools;
+        Title = $"UDMT — {format.Name}";
+        SeciliFormatBaslik.Text = $"Seçili format: {format.Name}";
+        FormatAdi.Text = format.Name;
+        FormatAciklamasi.Text = format.Description;
+        Uzantilar.Text = format.Extensions;
+        BilinenOyunlar.Text = format.KnownGames;
+        TespitYontemi.Text = format.DetectionMethod;
+        AdimListesi.ItemsSource = format.Steps;
+        TemaDugmesiniGuncelle();
     }
 
-    private void OyunuDegistir_Click(object sender, RoutedEventArgs e)
+    private void FormatiDegistir_Click(object sender, RoutedEventArgs e)
     {
-        var secim = new GameSelectionWindow(_profile.Id) { Owner = this };
-        if (secim.ShowDialog() != true || secim.SelectedProfile is null || secim.SelectedProfile.Id == _profile.Id)
+        var secim = new FormatSelectionWindow(_format.Id) { Owner = this };
+        if (secim.ShowDialog() != true || secim.SelectedFormat is null || secim.SelectedFormat.Id == _format.Id)
             return;
 
-        App.AnaPencereyiAc(secim.SelectedProfile, this);
+        App.AnaPencereyiAc(secim.SelectedFormat, this);
     }
+
+    private void TemaDugmesi_Click(object sender, RoutedEventArgs e)
+    {
+        ThemeManager.TemayiDegistir();
+        TemaDugmesiniGuncelle();
+    }
+
+    private void TemaDugmesiniGuncelle() => TemaDugmesi.Content = ThemeManager.DugmeMetni;
 }
