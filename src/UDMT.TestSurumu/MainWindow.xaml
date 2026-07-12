@@ -1,0 +1,106 @@
+<Window x:Class="UDMT.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="UDMT"
+        Width="1080" Height="680" MinWidth="820" MinHeight="540"
+        WindowStartupLocation="CenterScreen">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="64" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="32" />
+    </Grid.RowDefinitions>
+
+    <Border Grid.Row="0" Background="{StaticResource Panel}" BorderBrush="{StaticResource Cizgi}" BorderThickness="0,0,0,1">
+      <Grid Margin="20,0">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="0" Width="38" Height="38" CornerRadius="10" Background="{StaticResource Vurgu}" VerticalAlignment="Center">
+          <TextBlock Text="U" FontSize="21" FontWeight="Bold" Foreground="White"
+                     HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Border>
+        <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
+          <TextBlock Text="Universal Dubbing Modding Tool" FontSize="15" FontWeight="SemiBold" />
+          <TextBlock x:Name="SeciliOyunBaslik" Foreground="{StaticResource IkincilMetin}" FontSize="12" />
+        </StackPanel>
+        <Button Grid.Column="2" Content="Oyunu Değiştir" Style="{StaticResource IkincilDugme}"
+                VerticalAlignment="Center" Click="OyunuDegistir_Click" />
+      </Grid>
+    </Border>
+
+    <Grid Grid.Row="1" Margin="28">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+      </Grid.RowDefinitions>
+
+      <Grid Grid.Row="0">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+          <TextBlock x:Name="OyunAdi" FontSize="29" FontWeight="SemiBold" />
+          <TextBlock x:Name="OyunAciklamasi" Margin="0,8,0,0" FontSize="13"
+                     Foreground="{StaticResource IkincilMetin}" TextWrapping="Wrap" />
+        </StackPanel>
+        <Border Grid.Column="1" Margin="20,0,0,0" Padding="14,7" CornerRadius="16"
+                Background="{StaticResource PanelVurgu}" VerticalAlignment="Top">
+          <TextBlock x:Name="ArsivTuru" FontWeight="SemiBold" Foreground="{StaticResource Vurgu}" />
+        </Border>
+      </Grid>
+
+      <Border Grid.Row="1" Margin="0,24,0,18" Padding="16" CornerRadius="9"
+              Background="#27231B" BorderBrush="#6C592E" BorderThickness="1">
+        <StackPanel>
+          <TextBlock Text="Bu paketin test kapsamı" FontWeight="SemiBold" Foreground="#FFD77A" />
+          <TextBlock Margin="0,5,0,0" TextWrapping="Wrap" Foreground="#E6D5AA"
+                     Text="Bu beta paketinde oyun seçimi, oyun değiştirme ve seçilen oyuna göre doğru araçların gösterilmesi test edilebilir. Arşiv okuma, ses dönüştürme ve yeniden paketleme çekirdeği henüz bu indirilebilir pakete bağlanmamıştır." />
+        </StackPanel>
+      </Border>
+
+      <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+        <ItemsControl x:Name="AracListesi">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Border Margin="0,0,0,12" Padding="18" CornerRadius="9"
+                      Background="{StaticResource Panel}" BorderBrush="{StaticResource Cizgi}" BorderThickness="1">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+                  <StackPanel Grid.Column="0">
+                    <TextBlock Text="{Binding Title}" FontSize="17" FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding Description}" Margin="0,6,24,0" FontSize="12"
+                               Foreground="{StaticResource IkincilMetin}" TextWrapping="Wrap" />
+                  </StackPanel>
+                  <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <Border Padding="11,6" CornerRadius="13" Background="{StaticResource PanelVurgu}">
+                      <TextBlock Text="{Binding Status}" FontSize="11" Foreground="{StaticResource IkincilMetin}" />
+                    </Border>
+                  </StackPanel>
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+    </Grid>
+
+    <Border Grid.Row="2" Background="{StaticResource Panel}" BorderBrush="{StaticResource Cizgi}" BorderThickness="0,1,0,0">
+      <Grid Margin="16,0">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" Text="Hazır" FontSize="11" Foreground="{StaticResource IkincilMetin}" VerticalAlignment="Center" />
+        <TextBlock Grid.Column="1" Text="v0.2.0-beta.1" FontSize="11" Foreground="{StaticResource IkincilMetin}" VerticalAlignment="Center" />
+      </Grid>
+    </Border>
+  </Grid>
+</Window>
